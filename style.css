@@ -1,0 +1,277 @@
+/* BASE STYLES */
+
+:root {
+	--lightBlue: #B6C7F1;
+	--lightPurple: #D0B5F2;
+	--darkPurple: #510CA4;
+	--darkerPurple: #330767;
+}
+
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	font-weight: 400;
+	font-size: 16px;
+	font-family: 'Montserrat', Arial, sans-serif;
+	text-align: center;
+	color: var(--darkerPurple);
+}
+
+input {
+	background-color: inherit;
+	border: 2px solid var(--darkPurple);
+}
+
+/* hide number input arrows. code from w3schools
+Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+input:hover, input:focus {
+	background-color: var(--lightPurple);
+}
+
+/* STRUCTURAL STYLES */
+
+body {
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--darkerPurple);
+}
+
+main {
+	background-color: var(--lightBlue);
+	padding: 2em;
+	border-radius: 4em;
+}
+
+h1 {
+	font-size: 2em;
+	font-weight: 700;
+	color: var(--darkPurple);
+	padding: 0.5em;
+}
+
+/* SUBTOTAL SECTION */
+
+label[for="subtotal"] {
+	font-weight: 500;
+	padding: 0.5em;
+}
+
+#subtotal {
+	width: 6em;
+	padding: 0.25em 0.5em 0.25em 1.25em;
+	background-image: url("https://sydpeay.github.io/tip-calculator/images/dollar-sign.svg");
+	background-repeat: no-repeat;
+	background-size: auto 1.25em;
+	background-position: left center;
+	border-radius: 0.5em;
+}
+
+#subtotal::placeholder {
+	color: var(--darkPurple);
+	font-size: 0.9em;
+}
+
+#subtotal-validation-text {
+	display: none;
+	padding: 1em;
+}
+
+/* TIP SECTION */
+
+#tip-amount-prompt {
+	font-weight: 500;
+	padding: 0.5em;
+	margin-top: 0.5em;
+}
+
+#tip-percent-section {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+#tip-percent-section label {
+	font-weight: 500;
+	border: 2px solid var(--darkPurple);
+	border-radius: 1em;
+	padding: 0.5em 1em;
+	margin: 0.25em;
+}
+
+#tip-percent-section label:hover {
+	background-color: var(--lightPurple);
+	color: var(--darkerPurple);
+}
+
+.active {
+	background-color: var(--darkPurple);
+	color: var(--lightBlue);
+}
+
+#tip-percent-section input[type=radio] {
+	opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Custom Tip Section */
+#custom-tip-section {
+	display: none;
+	margin: 1em auto;
+}
+
+label[for="custom-tip"] {
+	background-color: var(--darkPurple);
+	color: var(--lightBlue);
+	padding: 1em;
+	font-weight: 500;
+	border-radius: 1em;
+}
+
+#custom-tip {
+	width: 3.25em;
+	padding: 0.25em 1.25em 0.25em 0.5em;
+	background-color: var(--lightBlue);
+	background-image: url("https://sydpeay.github.io/tip-calculator/images/percent.svg");
+	background-repeat: no-repeat;
+	background-size: auto 1.25em;
+	background-position: right center;
+	border-radius: 0.5em;
+}
+
+#custom-tip::placeholder {
+	color: var(--darkPurple);
+	font-size: 0.9em;
+}
+
+/* SPLIT BILL CUSTOM CHECKBOX */
+
+/* Customize the label (the container) */
+#split-bill-label {
+	font-weight: 500;
+  display: inline-block;
+  position: relative;
+  padding: 0.5em 1em 0.5em 1.5em;
+	margin-top: 0.5em;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+#split-bill-label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+#split-bill-check {
+  position: absolute;
+  top: 0.5em;
+  left: 0;
+  height: 1em;
+  width: 1em;
+  border: 2px solid var(--darkPurple);
+	border-radius: 0.25em;
+}
+
+/* On mouse-over, add a grey background color */
+#split-bill-label:hover input ~ #split-bill-check {
+  background-color: var(--lightPurple);
+}
+
+/* When the checkbox is checked, add a blue background */
+#split-bill-label input:checked ~ #split-bill-check {
+  background-color: var(--darkPurple);
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+#split-bill-check::after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Style the checkmark */
+#split-bill-label #split-bill-check::after {
+  width: 0.25em;
+  height: 0.5em;
+  border: solid var(--lightBlue);
+	left: 2.5px;
+	bottom: 2.5px;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* Show the checkmark when checked */
+#split-bill-label input:checked ~ #split-bill-check::after {
+  display: block;
+}
+
+/* SPLIT BILL SECTION */
+
+#split-bill-section {
+	display: none;
+}
+
+label[for="guests"] {
+	font-weight: 500;
+	padding: 0.25em;
+}
+
+#guests {
+	width: 3em;
+	padding: 0.25em 0.5em;
+	border-radius: 0.5em;
+}
+
+#guest-validation-text {
+	display: none;
+	padding: 0.5em;
+}
+
+/* BUTTON */
+
+button {
+	display: block;
+	padding: 1em 1.5em;
+	margin: 1em auto;
+	background-color: inherit;
+	color: var(--darkPurple);
+	font-weight: 700;
+	border: 4px solid var(--darkPurple);
+	border-radius: 1.5em;
+}
+
+button:hover {
+	background-color: var(--darkPurple);
+	color: var(--lightBlue);
+}
+
+/* RESULTS SECTION */
+
+#results-section {
+	display: none;
+}
