@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="./style.css">
+
+    <title>Tip Calculator</title>
+
+  </head>
+
+  <body>
+
+    <main>
+
+      <h1 id="main-heading">
+        Tip Calculator
+      </h1>
+
+      <form id="calculator-form">
+
+        <section id="subtotal-section">
+          <label for="subtotal">Subtotal</label>
+          <input id="subtotal" type="number" name="subtotal" step="0.01" placeholder="Subtotal" oninput="subtotalValidation(this.value)">
+          <p id="subtotal-validation-text">
+            Please enter a valid subtotal.
+          </p>
+        </section>
+
+        <p id="tip-amount-prompt">
+          Tip Amount
+        </p>
+
+        <section id="tip-percent-section">
+
+          <label for="15-percent" class="percent-label">
+            15%
+            <input id="15-percent" type="radio" name="15-percent" value="0.15" oninput="storeTipPercent(this.value)">
+          </label>
+
+          <label for="20-percent" class="percent-label">
+            20%
+            <input id="20-percent" type="radio" name="20-percent" value="0.20" oninput="storeTipPercent(this.value)">
+          </label>
+
+          <label for="25-percent" class="percent-label">
+            25%
+            <input id="25-percent" type="radio" name="25-percent" value="0.25" oninput="storeTipPercent(this.value)">
+          </label>
+
+          <label for="30-percent" class="percent-label">
+            30%
+            <input id="30-percent" type="radio" name="30-percent" value="0.30" oninput="storeTipPercent(this.value)">
+          </label>
+
+          <label for="custom-radio" class="percent-label">
+            Custom
+            <input id="custom-radio" type="radio" name="custom-radio" oninput="showCustomTip()">
+          </label>
+
+        </section>
+
+        <section id="custom-tip-section">
+          <label for="custom-tip">Custom tip
+					<input id="custom-tip" type="number" name="custom-tip" oninput="storeTipPercent(this.value * 0.01)" placeholder="20">
+					</label>
+					
+        </section>
+
+
+        <label for="split-bill" id="split-bill-label">
+          Split the bill?
+          <input id="split-bill" type="checkbox" name="split-bill" oninput="showSplitBillSection()">
+					<span id="split-bill-check"></span>
+        </label>
+
+        <section id="split-bill-section">
+          <label for="guests">Number of Guests</label>
+          <input id="guests" type="number" step="1" value="1" oninput="guestsValidation(this.value)">
+          <p id="guest-validation-text">
+            Please enter a valid number of guests.
+          </p>
+        </section>
+
+        <button type="button" onclick="calculate()">
+          Calculate
+        </button>
+
+      </form>
+
+      <section id="results-section">
+        <p id="subtotal-display">
+          Subtotal: <span id="subtotal-amount"></span>
+        </p>
+        <p id="tip-display">
+          Tip: <span id="tip-amount"></span>
+        </p>
+        <p id="total-display">
+          Total: <span id="total-amount"></span>
+        </p>
+      </section>
+
+    </main>
+
+    <script>
+    
+      // declare global variables
+      var tipPercent;
+
+      // subtotal validation
+      function subtotalValidation(subtotal) {
+        if (isNaN(subtotal) || parseFloat(subtotal) < 0) {
+          document.getElementById("subtotal-validation-text").style.display = "block";
+        } else {
+          document.getElementById("subtotal-validation-text").style.display = "none";
+        }
+      }
+
+      // add active state to tip percent buttons
+      let container = document.getElementById("tip-percent-section");
+      let buttons = container.getElementsByClassName("percent-label");
+
+      for (let i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener("click", selectTipPercent);
+      }
+
+      function selectTipPercent() {
+        var current = document.getElementsByClassName("active");
+
+          // If there's no active class
+          if (current.length > 0) {
+            current[0].className = current[0].className.replace(" active", "");
+          }
+
+          // Add the active class to the current/clicked button
+          this.className += " active";
+      }
+
+      // store tip percent
+      function storeTipPercent(tipPercentInput) {
+        tipPercent = parseFloat(tipPercentInput);
+      }
+
+      // show custom tip
+      function showCustomTip() {
+        let customTipRadio = document.getElementById("custom-radio");
+        if (customTipRadio.checked == true) {
+          document.getElementById("custom-tip-section").style.display = "block";
+        } else {
+          document.getElementById("custom-tip-section").style.display = "none";
+        }
+      }
+
+      // show split bill
+      function showSplitBillSection() {
+        let splitBill = document.getElementById("split-bill");
+        if (splitBill.checked == true) {
+          document.getElementById("split-bill-section").style.display = "block";
+        } else {
+          document.getElementById("split-bill-section").style.display = "none";
+        }
+      }
+
+      // guests validation
+      function guestsValidation(guests) {
+        if (isNaN(guests) || parseFloat(guests) < 0) {
+          document.getElementById("guest-validation-text").style.display = "block";
+        } else {
+          document.getElementById("guest-validation-text").style.display = "none";
+        }
+      }
+
+      // tip calculator
+      function calculate() {
+        // declare variables and perform calculations
+        let guests = parseInt(document.getElementById("guests").value);
+        let subtotal = (parseFloat(document.getElementById("subtotal").value));
+        let tip = (subtotal * tipPercent);
+        let total = (subtotal + tip);
+        subtotal = subtotal / guests;
+        tip = tip / guests;
+        total = total / guests;
+
+        // change display
+        document.getElementById("results-section").style.display = "block";	
+        if (guests > 1) {
+          document.getElementById("subtotal-amount").innerHTML = "$" + subtotal.toFixed(2) + " per person";
+          document.getElementById("tip-amount").innerHTML = "$" + tip.toFixed(2) + " per person";
+          document.getElementById("total-amount").innerHTML = "$" + total.toFixed(2) + " per person";
+        } else {
+          document.getElementById("subtotal-amount").innerHTML = "$" + subtotal.toFixed(2);
+          document.getElementById("tip-amount").innerHTML = "$" + tip.toFixed(2);
+          document.getElementById("total-amount").innerHTML = "$" + total.toFixed(2);
+        }
+      }
+    
+    </script>
+    
+  </body>
+
+</html>
