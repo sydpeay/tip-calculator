@@ -9,10 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="./style.css">
 
-    <title>Tip Calculator</title>
+    <title> </title>
 
   </head>
 
@@ -34,8 +32,8 @@
           </p>
         </section>
 
-        <p id="tip-amount-prompt">
-          Tip Amount
+        <p id="tip-percent-prompt">
+          Tip Percent
         </p>
 
         <section id="tip-percent-section">
@@ -69,20 +67,20 @@
 
         <section id="custom-tip-section">
           <label for="custom-tip">Custom tip
-					<input id="custom-tip" type="number" name="custom-tip" oninput="storeTipPercent(this.value * 0.01)" placeholder="20">
-					</label>
-					
+            <input id="custom-tip" type="number" name="custom-tip" oninput="storeTipPercent(this.value * 0.01)" placeholder="20">
+          </label>
+
         </section>
 
 
         <label for="split-bill" id="split-bill-label">
           Split the bill?
           <input id="split-bill" type="checkbox" name="split-bill" oninput="showSplitBillSection()">
-					<span id="split-bill-check"></span>
+          <span id="split-bill-check"></span>
         </label>
 
         <section id="split-bill-section">
-          <label for="guests">Number of Guests</label>
+          <label for="guests">Guests</label>
           <input id="guests" type="number" step="1" value="1" oninput="guestsValidation(this.value)">
           <p id="guest-validation-text">
             Please enter a valid number of guests.
@@ -99,110 +97,121 @@
         <p id="subtotal-display">
           Subtotal: <span id="subtotal-amount"></span>
         </p>
+        <p id="percent-tip-display">
+          Tip Percent: <span id="percent-tip-amount"></span>
+        </p>
         <p id="tip-display">
-          Tip: <span id="tip-amount"></span>
+          Tip Amount: <span id="tip-amount"></span>
         </p>
         <p id="total-display">
           Total: <span id="total-amount"></span>
         </p>
+
+        <button type="button" onclick="window.location.reload()">
+          Reload
+        </button>
       </section>
 
     </main>
+		
+		<script>
+		
+			// declare global variables
+			var tipPercent;
 
-    <script>
-    
-      // declare global variables
-      var tipPercent;
+			// subtotal validation
+			function subtotalValidation(subtotal) {
+				if (isNaN(subtotal) || parseFloat(subtotal) < 0) {
+					document.getElementById("subtotal-validation-text").style.display = "block";
+				} else {
+					document.getElementById("subtotal-validation-text").style.display = "none";
+				}
+			}
 
-      // subtotal validation
-      function subtotalValidation(subtotal) {
-        if (isNaN(subtotal) || parseFloat(subtotal) < 0) {
-          document.getElementById("subtotal-validation-text").style.display = "block";
-        } else {
-          document.getElementById("subtotal-validation-text").style.display = "none";
-        }
-      }
+			// add active state to tip percent buttons
+			let container = document.getElementById("tip-percent-section");
+			let buttons = container.getElementsByClassName("percent-label");
 
-      // add active state to tip percent buttons
-      let container = document.getElementById("tip-percent-section");
-      let buttons = container.getElementsByClassName("percent-label");
+			for (let i = 0; i < buttons.length; i++) {
+				buttons[i].addEventListener("click", selectTipPercent);
+			}
 
-      for (let i = 0; i < buttons.length; i++) {
-        buttons[i].addEventListener("click", selectTipPercent);
-      }
+			function selectTipPercent() {
+				var current = document.getElementsByClassName("active");
 
-      function selectTipPercent() {
-        var current = document.getElementsByClassName("active");
+				// If there's no active class
+				if (current.length > 0) {
+					current[0].className = current[0].className.replace(" active", "");
+				}
 
-          // If there's no active class
-          if (current.length > 0) {
-            current[0].className = current[0].className.replace(" active", "");
-          }
+				// Add the active class to the current/clicked button
+				this.className += " active";
+			}
 
-          // Add the active class to the current/clicked button
-          this.className += " active";
-      }
+			// store tip percent
+			function storeTipPercent(tipPercentInput) {
+				tipPercent = parseFloat(tipPercentInput);
+			}
 
-      // store tip percent
-      function storeTipPercent(tipPercentInput) {
-        tipPercent = parseFloat(tipPercentInput);
-      }
+			// show custom tip
+			function showCustomTip() {
+				let customTipRadio = document.getElementById("custom-radio");
+				if (customTipRadio.checked == true) {
+					document.getElementById("custom-tip-section").style.display = "block";
+				} else {
+					document.getElementById("custom-tip-section").style.display = "none";
+				}
+			}
 
-      // show custom tip
-      function showCustomTip() {
-        let customTipRadio = document.getElementById("custom-radio");
-        if (customTipRadio.checked == true) {
-          document.getElementById("custom-tip-section").style.display = "block";
-        } else {
-          document.getElementById("custom-tip-section").style.display = "none";
-        }
-      }
+			// show split bill
+			function showSplitBillSection() {
+				let splitBill = document.getElementById("split-bill");
+				if (splitBill.checked == true) {
+					document.getElementById("split-bill-section").style.display = "block";
+				} else {
+					document.getElementById("split-bill-section").style.display = "none";
+				}
+			}
 
-      // show split bill
-      function showSplitBillSection() {
-        let splitBill = document.getElementById("split-bill");
-        if (splitBill.checked == true) {
-          document.getElementById("split-bill-section").style.display = "block";
-        } else {
-          document.getElementById("split-bill-section").style.display = "none";
-        }
-      }
+			// guests validation
+			function guestsValidation(guests) {
+				if (isNaN(guests) || parseFloat(guests) < 0) {
+					document.getElementById("guest-validation-text").style.display = "block";
+				} else {
+					document.getElementById("guest-validation-text").style.display = "none";
+				}
+			}
 
-      // guests validation
-      function guestsValidation(guests) {
-        if (isNaN(guests) || parseFloat(guests) < 0) {
-          document.getElementById("guest-validation-text").style.display = "block";
-        } else {
-          document.getElementById("guest-validation-text").style.display = "none";
-        }
-      }
+			// tip calculator
+			function calculate() {
+				// declare variables and perform calculations
+				let guests = parseInt(document.getElementById("guests").value);
+				let subtotal = (parseFloat(document.getElementById("subtotal").value));
+				let tipPercentDisplay = tipPercent * 100;
+				let tip = (subtotal * tipPercent);
+				let total = (subtotal + tip);
+				subtotal = subtotal / guests;
+				tip = tip / guests;
+				total = total / guests;
 
-      // tip calculator
-      function calculate() {
-        // declare variables and perform calculations
-        let guests = parseInt(document.getElementById("guests").value);
-        let subtotal = (parseFloat(document.getElementById("subtotal").value));
-        let tip = (subtotal * tipPercent);
-        let total = (subtotal + tip);
-        subtotal = subtotal / guests;
-        tip = tip / guests;
-        total = total / guests;
+				// change display
+				document.getElementById("calculator-form").style.display = "none";
+				document.getElementById("results-section").style.display = "block";
+				if (guests > 1) {
+					document.getElementById("subtotal-amount").innerHTML = "$" + subtotal.toFixed(2) + " per person";
+					document.getElementById("percent-tip-amount").innerHTML = tipPercentDisplay.toFixed() + "%";
+					document.getElementById("tip-amount").innerHTML = "$" + tip.toFixed(2) + " per person";
+					document.getElementById("total-amount").innerHTML = "$" + total.toFixed(2) + " per person";
+				} else {
+					document.getElementById("subtotal-amount").innerHTML = "$" + subtotal.toFixed(2);
+					document.getElementById("percent-tip-amount").innerHTML = tipPercentDisplay.toFixed() + "%";
+					document.getElementById("tip-amount").innerHTML = "$" + tip.toFixed(2);
+					document.getElementById("total-amount").innerHTML = "$" + total.toFixed(2);
+				}
+			}
+			
+		</script>
 
-        // change display
-        document.getElementById("results-section").style.display = "block";	
-        if (guests > 1) {
-          document.getElementById("subtotal-amount").innerHTML = "$" + subtotal.toFixed(2) + " per person";
-          document.getElementById("tip-amount").innerHTML = "$" + tip.toFixed(2) + " per person";
-          document.getElementById("total-amount").innerHTML = "$" + total.toFixed(2) + " per person";
-        } else {
-          document.getElementById("subtotal-amount").innerHTML = "$" + subtotal.toFixed(2);
-          document.getElementById("tip-amount").innerHTML = "$" + tip.toFixed(2);
-          document.getElementById("total-amount").innerHTML = "$" + total.toFixed(2);
-        }
-      }
-    
-    </script>
-    
   </body>
 
 </html>
